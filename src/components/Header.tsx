@@ -13,6 +13,7 @@ interface HeaderProps {
   onGoToSimulator?: () => void;
   onGoToProfile?: () => void;
   onGoToDashboard?: () => void;
+  onGoToSignup?: () => void;
 }
 
 export function Header({
@@ -25,7 +26,9 @@ export function Header({
   onGoToLearn,
   onGoToSimulator,
   onGoToProfile,
-  onGoToDashboard
+  onGoToDashboard,
+  onGoToSignup
+
 }: HeaderProps) {
   return (
     <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
@@ -60,17 +63,19 @@ export function Header({
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Stocks
+              Market
             </button>
             <button 
               onClick={onGoToPortfolio} 
-              className={`transition-colors ${
-                currentPage === "portfolio" 
-                  ? "text-primary font-medium" 
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
+              className={`transition-colors relative
+                ${
+                  currentPage === "portfolio"
+                    ? "text-primary font-medium"
+                    : "text-muted-foreground hover:text-foreground"
+                }
+              `}
             >
-              Portfolio
+              Wallet
             </button>
             <button 
               onClick={onGoToCommunity} 
@@ -118,7 +123,7 @@ export function Header({
             <Button variant="ghost" onClick={onGoToProfile} size="icon" className="hidden md:flex">
               <User className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" className="hidden md:inline-flex">Sign In</Button>
+            <Button variant="ghost" onClick={onGoToSignup} className="hidden md:inline-flex">Sign Up</Button>
             <Button onClick={onGoToDashboard}>Get Started</Button>
             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="w-5 h-5" />
@@ -129,3 +134,4 @@ export function Header({
     </header>
   );
 }
+

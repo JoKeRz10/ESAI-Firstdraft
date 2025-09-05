@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "./components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
@@ -14,8 +14,10 @@ import { Simulator } from "./components/Simulator";
 import { Profile } from "./components/Profile";
 import { Header } from "./components/Header";
 import { LoadingScreen } from "./components/LoadingScreen";
+import { Signup } from "./components/Signup";
+import { Login } from "./components/Login";
 
-type Page = "home" | "dashboard" | "portfolio" | "stocks" | "community" | "news" | "learn" | "simulator" | "profile";
+type Page = "home" | "dashboard" | "portfolio" | "stocks" | "community" | "news" | "learn" | "simulator" | "profile" | "signup" | "login";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>("home");
@@ -30,6 +32,8 @@ export default function App() {
   const goToSimulator = () => setCurrentPage("simulator");
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
+  const goToSignup = () => setCurrentPage("signup");
+  const goToLogin = () => setCurrentPage("login");
 
   const navigationProps = {
     currentPage,
@@ -67,6 +71,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <PredictionDashboard onBackToHome={goToHome} onGoToPortfolio={goToPortfolio} />
       </>
@@ -87,6 +92,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Portfolio onBackToHome={goToHome} onGoToDashboard={goToDashboard} />
       </>
@@ -107,6 +113,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Stocks {...navigationProps} />
       </>
@@ -127,6 +134,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Community {...navigationProps} />
       </>
@@ -147,6 +155,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <News {...navigationProps} />
       </>
@@ -167,6 +176,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Learn {...navigationProps} />
       </>
@@ -187,6 +197,7 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Simulator {...navigationProps} />
       </>
@@ -207,10 +218,19 @@ export default function App() {
           onGoToSimulator={goToSimulator}
           onGoToProfile={goToProfile}
           onGoToDashboard={goToDashboard}
+          onGoToSignup={goToSignup}
         />
         <Profile {...navigationProps} />
       </>
     );
+  }
+
+  if (currentPage === "signup") {
+    return <Signup onGoToHome={goToHome} onGoToLogin={goToLogin} onGoToDashboard={goToDashboard} />;
+  }
+
+  if (currentPage === "login") {
+    return <Login onGoToHome={goToHome} onGoToSignup={goToSignup} onGoToDashboard={goToDashboard} />;
   }
 
   return (
@@ -227,6 +247,7 @@ export default function App() {
         onGoToSimulator={goToSimulator}
         onGoToProfile={goToProfile}
         onGoToDashboard={goToDashboard}
+        onGoToSignup={goToSignup}
       />
 
       {/* Hero Section */}
@@ -248,12 +269,12 @@ export default function App() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="px-8" onClick={goToDashboard}>
-                Start Predicting Now
+              <Button size="lg" className="px-8" onClick={goToSignup}>
+                Get Started Free
                 <TrendingUp className="w-4 h-4 ml-2" />
               </Button>
-              <Button variant="outline" size="lg" className="px-8">
-                Watch Demo
+              <Button variant="outline" size="lg" className="px-8" onClick={goToLogin}>
+                Sign In
               </Button>
             </div>
             
@@ -403,11 +424,11 @@ export default function App() {
               Join thousands of traders who are already using StockEye AI to make smarter investment decisions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="px-8" onClick={goToDashboard}>
+              <Button size="lg" className="px-8" onClick={goToSignup}>
                 Start Free Trial
               </Button>
-              <Button variant="outline" size="lg" className="px-8">
-                Schedule Demo
+              <Button variant="outline" size="lg" className="px-8" onClick={goToLogin}>
+                Sign In
               </Button>
             </div>
           </div>
@@ -420,10 +441,18 @@ export default function App() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4 text-primary-foreground" />
-                </div>
-                <span className="font-semibold">StockEye AI</span>
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-white">
+                <img 
+                  src="/src/assets/logo.png" 
+                  alt="StockEye AI Logo" 
+                  className="w-full h-full object-contain p-1"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E";
+                  }}
+                />
+              </div>
+                <span className="font-semibold">EyeStock AI</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Empowering traders with AI-driven market predictions.
